@@ -3,6 +3,7 @@ from data import *
 from const_input import * 
 from const_calc import *
 from oper_input import *
+from oper_calc import * 
 
 
 
@@ -17,6 +18,11 @@ def main():
 
 
     calc_totals(er_fc, ref_row_start=refd["gen_startrow"]+1, ref_row_end=er_fc-1)
+
+    # def run_oper_calc()
+
+    run_oper_calc()
+    # ws_op_calc.write(5, 8, "hellloooo")
 
 
 

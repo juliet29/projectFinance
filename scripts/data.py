@@ -1,6 +1,13 @@
 from collections import OrderedDict
 
+# ============================================================================ #
+# ! Timing
+
 months = range(1,25)
+
+year_nums = range(0,40)
+year_names = [f"{2025 + ix} - Year {ix}" for ix in year_nums]
+year_names[0] = "Commisioning - 2025 - Year 0"
 
 # ============================================================================ #
 # ! Pre-Financial Close Costs 
@@ -56,28 +63,48 @@ for i in list(months):
 
 
 # ============================================================================ #
+# ! Calculations
+
+
+
+v = 10 # in reality, v is a ref to another sheet...
+quarterly_calc = lambda v: [f"={v}*4" for i in year_names]
+# quarterly_calc[0] = "={v}*2" july -> july so no need...
+
+monthly_calc = lambda v:[f"={v}*12" for i in year_names]
+# quarterly_calc[0] = "={v}*6"
+
+annual_calc = lambda v:[f"={v}" for i in year_names]
+annual_calc_0_025 = lambda v:[f"={v}*1.025" for i in year_names]
+
+one_time_calc = lambda v:["=0" if i > 0 else f"={v}"  for i in year_nums]
+# one_time_calc[0] = f"={v}"
+
+
+# ============================================================================ #
 # ! Commisioning Costs 
 
 comm_fees = { # one time 
-    "ABSCO Interconnection Fee": 2.5e6,
-    "ABSCO Network Upgrades": 5.2e6,
-    "HIPU Interconnection Fee": 2e6
+    "ABSCO Interconnection Fee": [2.5e6, one_time_calc],
+    "ABSCO Network Upgrades": [5.2e6, one_time_calc],
+    "HIPU Interconnection Fee": [2e6, one_time_calc]
 }
+comm_fees = OrderedDict(comm_fees)
 
 
 # ============================================================================ #
 # ! Operations Costs 
 
 # TODO include notes about how these are going to be calculated 
-
 # during operations and constructon 
 
 other_fees = {
-    "Quarely MaintCo Maintennance Fee": 690e3, # quarterly during operations 
-    "Annual Fisheries Mitigation Permit": 130e3, # annual (during operations?)
-    "Monthly HIPU Interconection Fee, Decade 1": 110e3, # monthly during oper.
-    "Monthly HIPU Interconection Fee, Post-Decade 1": 220e3
+    "Quarterly MaintCo Maintennance Fee": [690e3, quarterly_calc], # quarterly during operations 
+    "Annual Fisheries Mitigation Permit": [130e3, annual_calc], # annual (during operations?)
+    "Monthly HIPU Interconection Fee, Decade 1": [110e3, monthly_calc], # monthly during oper.
+    "Monthly HIPU Interconection Fee, Post-Decade 1": [220e3, monthly_calc] # monthly during oper
 }
+other_fees = OrderedDict(other_fees)
 
 corporate_costs = { # annually during construction and operations, escalate w/ annual rate of inflation 2.5% starting in oper. phase 
     "General" : {
@@ -108,6 +135,15 @@ corporate_costs = { # annually during construction and operations, escalate w/ a
     }
 
 }
+
+for k,v in corporate_costs.items():
+    for k2, v2 in v.items():
+        corporate_costs[k][k2] = [v2, annual_calc_0_025]
+
+corporate_costs = OrderedDict(corporate_costs)
+
+
+
 
 
 
