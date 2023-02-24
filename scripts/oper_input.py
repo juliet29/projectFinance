@@ -5,6 +5,7 @@ from data import *
 
 # keep track of rows 
 refd["oi"] = {}
+# refd["oi"]["subheadings"] = {}
 row = refd["gen_startrow"]
 
 def make_input_section(row, name, dict):
@@ -21,6 +22,7 @@ def make_input_section(row, name, dict):
         for k,v in dict.items():
             # ws_op_in.write(row, 0, k, secondary_heading_format)
             ws_op_in.merge_range(row, 0, row, 1, k, secondary_heading_format)
+            refd["oi"][f"{k}_sr"] = row
             row+=1
             for k2, v2 in v.items():
                 ws_op_in.write(row, 0, k2)

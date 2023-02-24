@@ -75,7 +75,7 @@ monthly_calc = lambda v:[f"={v}*12" for i in year_names]
 # quarterly_calc[0] = "={v}*6"
 
 annual_calc = lambda v:[f"={v}" for i in year_names]
-annual_calc_0_025 = lambda v:[f"={v}*1.025" for i in year_names]
+annual_calc_0_025 = lambda v:[f"={v}*1.025" for i in year_names] # each is supposed to ref the last... 
 
 one_time_calc = lambda v:["=0" if i > 0 else f"={v}"  for i in year_nums]
 # one_time_calc[0] = f"={v}"
