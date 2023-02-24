@@ -9,6 +9,7 @@ workbook = xlsxwriter.Workbook('IslandEnergy.xlsx')
 ws_const_in = workbook.add_worksheet(name="Construction Period Cost Inputs")
 ws_const_calc = workbook.add_worksheet(name="Construction Period Calcs")
 ws_op_in = workbook.add_worksheet(name="Operat. Period Cost Inputs")
+ws_op_calc = workbook.add_worksheet(name="Operat. Period Calcs")
 
 # dictionary of references for wos 
 refd= {}
@@ -37,6 +38,10 @@ merge_format = workbook.add_format({
     # 'fg_color': 'yellow'
     })
 
+secondary_heading_format = workbook.add_format({
+    "italic": True, 
+})
+
 percent_format = workbook.add_format({'num_format': '0.00%'})
 
 left_align_format = workbook.add_format()
@@ -56,4 +61,7 @@ for name, sheet in workbook.sheetnames.items():
     sheet.set_column("A:AA", 30)
     
 
-
+def depth(d):
+     if isinstance(d, dict):
+        return 1 + (max(map(depth, d.values())) if d else 0)
+     return 0

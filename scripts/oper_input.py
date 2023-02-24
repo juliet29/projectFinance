@@ -12,14 +12,24 @@ def make_input_section(row, name, dict):
     row+=1
     refd["oi"][f"{name}_sr"] = row
 
-    for k,v in dict.items():
-        # if type(v) != dict
-        ws_op_in.write(row, 0, k)
-        ws_op_in.write(row, 1, v, money_format)
-        row += 1
+    if depth(dict) == 1:
+        for k,v in dict.items():
+            ws_op_in.write(row, 0, k)
+            ws_op_in.write(row, 1, v, money_format)
+            row += 1
+    else:
+        for k,v in dict.items():
+            # ws_op_in.write(row, 0, k, secondary_heading_format)
+            ws_op_in.merge_range(row, 0, row, 1, k, secondary_heading_format)
+            row+=1
+            for k2, v2 in v.items():
+                ws_op_in.write(row, 0, k2)
+                ws_op_in.write(row, 1, v2, money_format)
+                row += 1
     return row
+    
 # TODO: include col for how often this is paid 
 
 comm_er = make_input_section(row, 'Fees Paid at Commisioning', comm_fees)
-# op_fees_er = make_input_section(comm_er, 'General Operating Fees', other_fees)
-# corp_costs_er = make_input_section(op_fees_er, 'Corporate Costs', corporate_costs)
+op_fees_er = make_input_section(comm_er, 'General Operating Fees', other_fees)
+corp_costs_er = make_input_section(op_fees_er, 'Corporate Costs', corporate_costs)

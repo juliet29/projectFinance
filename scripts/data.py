@@ -68,11 +68,13 @@ comm_fees = { # one time
 # ============================================================================ #
 # ! Operations Costs 
 
+# TODO include notes about how these are going to be calculated 
+
 # during operations and constructon 
 
 other_fees = {
     "Quarely MaintCo Maintennance Fee": 690e3, # quarterly during operations 
-    "Annual Fisheries Mitigation Permit": 130e6, # annual (during operations?)
+    "Annual Fisheries Mitigation Permit": 130e3, # annual (during operations?)
     "Monthly HIPU Interconection Fee, Decade 1": 110e3, # monthly during oper.
     "Monthly HIPU Interconection Fee, Post-Decade 1": 220e3
 }
@@ -82,27 +84,27 @@ corporate_costs = { # annually during construction and operations, escalate w/ a
         "Corporate Resources": 1.9e6
     },
     "Outside Reources" : {
-        "Engineering": 0,
-        "Legal": 0,
-        "Accounting": 0,
-        "Community Relations": 0,
-        "Industry Relations": 0,
-        "Misc.": 0,
+        "Engineering": 220e3,
+        "Legal": 315e3,
+        "Accounting": 180e3,
+        "Community Relations": 80e3,
+        "Industry Relations": 20e3,
+        "Misc.": 50e3,
     },
     "Overhead": {
-        "Station Power Service": 0,
-        "Utilities": 0,
-        "Rent": 0,
-        "Telecommunications": 0,
-        "Travel/Office": 0,
-        "Misc.": 0,
-        "Contingency": 0,
+        "Station Power Service": 285e3,
+        "Utilities": 65e3,
+        "Rent": 82e3,
+        "Telecommunications": 50e3,
+        "Travel/Office": 260e3,
+        "Misc.": 200e3,
+        "Contingency": 120e3,
     },
     "Other Annual Costs": {
-        "Insurance": 0,
-        "Property Taxes": 0,
-        "Cable Easment": 0,
-        "Contribution to Stanford Global Project Center": 0,
+        "Insurance": 2.5e6,
+        "Property Taxes": 2.55e6, # TODO does this account for the other property taxes, maybe move...?
+        "Cable Easment": 700e3,
+        "Contribution to Stanford Global Project Center": 25e3,
     }
 
 }

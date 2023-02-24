@@ -24,9 +24,9 @@ def calc_on_inputs(local_start_row, foreign_start_row, input_data, merge_name, e
 
     # merge names in the first colum 
     if len_data > 1: 
-        sheet.merge_range(local_start_row, 0, local_start_row+len_data-1, 0, merge_name, bold_format)
+        ws_const_calc.merge_range(local_start_row, 0, local_start_row+len_data-1, 0, merge_name, bold_format)
     else:
-        sheet.write(local_start_row, 0, merge_name, bold_format)
+        ws_const_calc.write(local_start_row, 0, merge_name, bold_format)
         
 
     # local columns
@@ -91,7 +91,6 @@ def calc_epc(foreign_start_row, eqn_start_col, row, i):
 # ============================================================================ #
 # ! Calculate Totals 
 
-
 def calc_totals(row, ref_row_start, ref_row_end):
     sum_formulas = []
     for ix in range(len(months)+1):
@@ -99,9 +98,7 @@ def calc_totals(row, ref_row_start, ref_row_end):
         end_cell = xl_rowcol_to_cell(ref_row_end, 2+ix)
         sum_formula = f"=SUM({start_cell}:{end_cell})"
         sum_formulas.append(sum_formula)
-    ic(sum_formulas[0])
     
-
     ws_const_calc.write(row, 0, "Total", bold_format)
     for ix, sum_formula in enumerate(sum_formulas):
         ws_const_calc.write_formula(row, 2+ix, sum_formula, money_format)
