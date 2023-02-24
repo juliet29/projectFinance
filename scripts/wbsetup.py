@@ -1,5 +1,6 @@
 import xlsxwriter
 from xlsxwriter.utility import xl_rowcol_to_cell, xl_cell_to_rowcol
+from icecream import ic
 
 # ============================================================= #
 #  Setup workbook 
@@ -50,6 +51,6 @@ for name, sheet in workbook.sheetnames.items():
     sheet.write('A2', 'Sheet Name', bold_format)
     sheet.merge_range('B1:C1', "Island Energy", bold_format)
     sheet.merge_range('B2:C2', name, bold_format)
-    sheet.set_column("A:Z", 30)
+    sheet.set_column("A:AJ", 30)
 
 

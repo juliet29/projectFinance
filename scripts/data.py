@@ -14,6 +14,9 @@ fc_costs = {
 
 # eng, procurement, const base cost 
 epc_cost = 455e6
+epc_data = {
+        "epc_cost": 455e6
+    }
 
 # other payments over course of construction period 
 split_costs = {

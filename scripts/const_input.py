@@ -34,7 +34,7 @@ ws_const_in.merge_range(row, 0, row, 1, 'Costs Paid Over Construction Period', m
 row+=1
 refd["cpi"]["epc_sr"] = row 
 ws_const_in.write(row, col, "EPC Cost")
-ws_const_in.write(row, col+1, epc_cost)
+ws_const_in.write(row, col+1, epc_data["epc_cost"], money_format)
 
 # split costs 
 row+=1
@@ -60,5 +60,5 @@ row+=1
 refd["cpi"]["epc_perc_sr"] = row
 for k,v in epc_sched.items():
     ws_const_in.write(row, 0, k)
-    ws_const_in.write(row, 1, v, )#percent_format
+    ws_const_in.write(row, 1, v, percent_format )#percent_format
     row += 1

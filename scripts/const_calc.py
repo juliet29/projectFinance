@@ -7,6 +7,7 @@ from const_input import *
 
 # ============================================================================ #
 # ! Make Headings 
+
 headings = ["Payment Schedule Category", "Payment Name", "Financial Close"] + list(months) # TOOD -> make this nice, month 1 + date 
 
 col=0
@@ -82,7 +83,25 @@ def calc_epc(foreign_start_row, eqn_start_col, row, i):
             # get cell name from other sheet 
             epc_percent_cell = xl_rowcol_to_cell(epc_sched_row+ix, 1)
             epc_payment_cell = xl_rowcol_to_cell(foreign_start_row, 1)
-            print(epc_percent_cell, epc_payment_cell, ix)
+            # print(epc_percent_cell, epc_payment_cell, ix)
             # do calculation 
             ws_const_calc.write_formula(row, eqn_start_col+month, 
             f"='{ci_sheet}'!{epc_payment_cell} * '{ci_sheet}'!{epc_percent_cell}", money_format)
+
+# ============================================================================ #
+# ! Calculate Totals 
+
+
+def calc_totals(row, ref_row_start, ref_row_end):
+    sum_formulas = []
+    for ix in range(len(months)+1):
+        start_cell = xl_rowcol_to_cell(ref_row_start, 2+ix)
+        end_cell = xl_rowcol_to_cell(ref_row_end, 2+ix)
+        sum_formula = f"=SUM({start_cell}:{end_cell})"
+        sum_formulas.append(sum_formula)
+    ic(sum_formulas[0])
+    
+
+    ws_const_calc.write(row, 0, "Total", bold_format)
+    for ix, sum_formula in enumerate(sum_formulas):
+        ws_const_calc.write_formula(row, 2+ix, sum_formula, money_format)
