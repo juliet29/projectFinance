@@ -8,8 +8,9 @@ from icecream import ic
 workbook = xlsxwriter.Workbook('IslandEnergy.xlsx')
 ws_const_in = workbook.add_worksheet(name="Construction Period Cost Inputs")
 ws_const_calc = workbook.add_worksheet(name="Construction Period Calcs")
+ws_op_in = workbook.add_worksheet(name="Operat. Period Cost Inputs")
 
-# dictionary of references 
+# dictionary of references for wos 
 refd= {}
 refd["sheetnames"] = list(workbook.sheetnames.keys())
 refd["gen_startrow"] = 4 
@@ -51,6 +52,8 @@ for name, sheet in workbook.sheetnames.items():
     sheet.write('A2', 'Sheet Name', bold_format)
     sheet.merge_range('B1:C1', "Island Energy", bold_format)
     sheet.merge_range('B2:C2', name, bold_format)
-    sheet.set_column("A:AJ", 30)
+    sheet.set_column("A:C", 30)
+    sheet.set_column("A:AA", 30)
+    
 
 
