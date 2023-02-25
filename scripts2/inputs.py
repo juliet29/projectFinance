@@ -11,7 +11,7 @@ def make_two_index_df(d_orig):
     # arrange the dictionary to have tuples 
     reform_d = {(outerKey, innerKey): values for outerKey, innerDict in d.items() for innerKey, values in innerDict.items()}
     # make the multi index dictionary 
-    df = pd.DataFrame(reform_d, index=["Values"])
+    df = pd.DataFrame(reform_d, index=["Value"])
     df = df.T
     return df
 
