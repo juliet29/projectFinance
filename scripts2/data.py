@@ -67,7 +67,7 @@ monthly_split_costs = {
 
 # eng, procurement, const base cost 
 epc_data = {
-        "epc_cost": 455e6
+        "EPC Cost": 455e6
 }
 
 
@@ -91,9 +91,9 @@ for i in list(months):
 # ! Commisioning Costs 
 
 comm_fees = { # one time 
-    "ABSCO Interconnection Fee": [2.5e6, one_time_calc],
-    "ABSCO Network Upgrades": [5.2e6, one_time_calc],
-    "HIPU Interconnection Fee": [2e6, one_time_calc]
+    "ABSCO Interconnection Fee": 2.5e6,
+    "ABSCO Network Upgrades": 5.2e6,
+    "HIPU Interconnection Fee": 2e6
 }
 comm_fees = OrderedDict(comm_fees)
 
@@ -105,10 +105,10 @@ comm_fees = OrderedDict(comm_fees)
 # during operations and constructon 
 
 other_fees = {
-    "Quarterly MaintCo Maintennance Fee": [690e3, quarterly_calc], # quarterly during operations 
-    "Annual Fisheries Mitigation Permit": [130e3, annual_calc], # annual (during operations?)
-    "Monthly HIPU Interconection Fee, Decade 1": [110e3, monthly_calc], # monthly during oper.
-    "Monthly HIPU Interconection Fee, Post-Decade 1": [220e3, monthly_calc] # monthly during oper
+    "Quarterly MaintCo Maintennance Fee": 690e3, # quarterly during operations 
+    "Annual Fisheries Mitigation Permit": 130e3, # annual (during operations?)
+    "Monthly HIPU Interconection Fee, Decade 1": 110e3,  # monthly during oper.
+    "Monthly HIPU Interconection Fee, Post-Decade 1": 220e3,  # monthly during oper
 }
 other_fees = OrderedDict(other_fees)
 
