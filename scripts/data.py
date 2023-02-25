@@ -1,4 +1,6 @@
 from collections import OrderedDict
+from xlsxwriter.utility import xl_rowcol_to_cell, xl_cell_to_rowcol
+from icecream import ic
 
 # ============================================================================ #
 # ! Timing
@@ -75,10 +77,39 @@ monthly_calc = lambda v:[f"={v}*12" for i in year_names]
 # quarterly_calc[0] = "={v}*6"
 
 annual_calc = lambda v:[f"={v}" for i in year_names]
-annual_calc_0_025 = lambda v:[f"={v}*1.025" for i in year_names] # each is supposed to ref the last... 
 
 one_time_calc = lambda v:["=0" if i > 0 else f"={v}"  for i in year_nums]
 # one_time_calc[0] = f"={v}"
+
+annual_calc_0_025 = lambda v:[f"={v}*1.025" for i in year_names] # each is supposed to ref the last... 
+
+# def rising_calc(v, local_sr, local_sheet="Operat. Period Calcs", local_col=1):
+#     # ic(v.split("!")[0])
+#     sheet_ref = v.split("!")[0] + "!"
+#     # sr, sc = xl_cell_to_rowcol(v.split("!")[1])
+#     # ic(sr, sc)
+#     # do #0
+#     calcs = []
+#     calcs.append(f"={v}")
+#     for col in year_nums:
+#         ic(col, local_col+col)
+#         # ref cell NEEDS to be the cell that just got written in 
+#         ref_cell = xl_rowcol_to_cell(local_sr+1, local_col + col)
+#         # ic(ref_cell)
+#         curr_cell = f"='{local_sheet}'!{ref_cell}*1.025"
+#         # ic(curr_cell)
+#         calcs.append(curr_cell)
+#         # ic(len(calcs[0:-1]))
+
+#     calcs_fin = calcs[0:-1]
+#     ic(calcs_fin)
+#     return calcs_fin
+
+
+# fs = "Operat. Period Cost Inputs"
+# v =  f"'{fs}'!B16"
+# rising_calc(v)
+
 
 
 # ============================================================================ #
@@ -138,7 +169,7 @@ corporate_costs = { # annually during construction and operations, escalate w/ a
 
 for k,v in corporate_costs.items():
     for k2, v2 in v.items():
-        corporate_costs[k][k2] = [v2, annual_calc_0_025]
+        corporate_costs[k][k2] = [v2, rising_calc]
 
 corporate_costs = OrderedDict(corporate_costs)
 
@@ -147,3 +178,32 @@ corporate_costs = OrderedDict(corporate_costs)
 
 
 
+
+
+
+
+# def rising_calc(fs, v, value_cell="A1"):
+#     calcs = year_names
+#     values = year_names
+#     (row,col) = xl_cell_to_rowcol(value_cell)
+#     for ix in year_nums:
+#         if ix == 0:
+#             calcs[ix] = v # row, col
+#             values[ix] = v
+#         else:
+            
+#             prev_cell = values[ix-1].split("!")
+#             ic(prev_cell)
+#             # calcs[ix] = f"='{fs}'!{prev_cell}*1.025"
+
+#             # (row,col) = xl_cell_to_rowcol(prev_cell)
+#             # curr_cell = xl_rowcol_to_cell(row, col+1)
+#             # values[ix] = curr_cell
+#             # cell = xl_rowcol_to_cell(row, col-1)
+#     #         ic(cell)
+#     #         calcs[ix] = f"='{fs}'!{cell}*1.025" # calcs[ix-1]*1.025
+#     # ic(values)
+#     return calcs
+# fs = "Operat. Period Cost Inputs"
+# v =  f"'{fs}'!B16"
+# rising_calc( fs, v, value_cell="B16")

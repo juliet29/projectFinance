@@ -21,7 +21,7 @@ def make_headings():
 
 
 # ! Calculations 
-def make_calc(dict, section_label, local_sheet, local_sr, foreign_sheet_ix, ital=False, sub=False):
+def make_calc(dict, section_label, local_sheet, local_sr, foreign_sheet_ix, ital=False, sub=False, moving_calc=False):
     # get foreign sheet name and starting row 
     fs = refd["sheetnames"][foreign_sheet_ix]
     if sub:
@@ -49,10 +49,15 @@ def make_calc(dict, section_label, local_sheet, local_sr, foreign_sheet_ix, ital
             value_cell = xl_rowcol_to_cell(fr+ix, 1)
             v = f"'{fs}'!{value_cell}"
             ic(v)
-            calc = list(dict.values())[ix-1][1](v)
+            if not moving_calc:
+                calc = list(dict.values())[ix-1][1](v)
+            else:
+                calc = list(dict.values())[ix-1][1](v, local_sr)
             # apply to columns 
             for iz, c in enumerate(calc):
                 local_sheet.write_formula(local_sr+ix, iz+1, c, money_format)
+                ic(xl_rowcol_to_cell(local_sr+ix, iz+1))
+    
 
 
     return local_sr+ix
@@ -67,12 +72,12 @@ def run_oper_calc():
     er = make_calc(comm_fees, "Fees Paid at Commisioning", ws_op_calc, refd["gen_startrow"]+1, 2)
     er = make_calc(other_fees, "General Operating Fees", ws_op_calc, er+1, 2)
     
-    er = make_calc(corporate_costs["General"], "General", ws_op_calc, er+2, 2, True, True)
+    er = make_calc(corporate_costs["General"], "General", ws_op_calc, er+2, 2, True, True, True)
 
     other_corp_costs = list(corporate_costs.keys())[1:]
 
     for cost in other_corp_costs:
-        er = make_calc(corporate_costs[cost], cost, ws_op_calc, er+1, 2, True, True)
+        er = make_calc(corporate_costs[cost], cost, ws_op_calc, er+1, 2, True, True, True)
 
 
 # corporate_costs[""]
