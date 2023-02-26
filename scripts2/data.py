@@ -112,6 +112,7 @@ other_fees = {
 }
 other_fees = OrderedDict(other_fees)
 
+inflation_rate = 0.025
 corporate_costs = { # annually during construction and operations, escalate w/ annual rate of inflation 2.5% starting in oper. phase 
     "General" : {
         "Corporate Resources": 1.9e6
@@ -141,7 +142,6 @@ corporate_costs = { # annually during construction and operations, escalate w/ a
     }
 
 }
-
 
 corporate_costs = OrderedDict(corporate_costs)
 

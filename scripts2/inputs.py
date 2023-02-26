@@ -2,6 +2,10 @@ from collections import OrderedDict
 import pandas as pd
 from data import * 
 
+# ============================================================================ #
+# ! General Expenses 
+
+
 def make_two_index_df(d_orig):
     d = d_orig.copy()
     # make entries into arrays
@@ -33,3 +37,9 @@ oper_phase_inputs = make_two_index_df(oper_d)
 
 # ! Corporate Phase
 corp_inputs = make_two_index_df(corporate_costs)
+
+
+# ============================================================================ #
+#  ! Debt 
+ds = pd.read_csv("debt_service.csv", skiprows=[0,1], names=["Year", "Interest Payment", "Prinicpal Payment", "Fees"])
+ds = ds.T
