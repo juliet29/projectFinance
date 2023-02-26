@@ -3,6 +3,14 @@ import numpy as np
 from data import * 
 from inputs import *
 
+def make_year_col_names():
+        col_names = ["Financial Close - July 2023", "Construction Year 1 - July 2024", "Commisioning and Construction Year 2 - July 2025"]
+        year_names = [f"July {2025 + ix} - Year {ix}" for ix in year_nums]
+        col_names = col_names + year_names
+
+
+        return col_names
+
 def prep_for_calcs(df, yearly=False):
     # make a copy 
     df_df = df.copy()
@@ -121,3 +129,14 @@ for col in corp_df.columns[2:]:
 
 # calculate total per time period 
 corp_df.loc[("Total", ""), :] = corp_df.sum(axis=0)
+
+
+
+# ============================================================================ #
+# ! Debt Service 
+ds2 = ds.copy()
+col_names = make_year_col_names()
+ds2.insert(0, "newcol", [0]*4)
+ds2.insert(1, "newcol2", [0]*4)
+ds2 = ds2.set_axis(col_names[:23], axis=1, copy=True)
+ds2.drop("Year", axis=0, inplace=True)
