@@ -7,26 +7,26 @@ from icecream import ic
 
 months = range(1,25)
 
-year_nums = range(0,40)
-year_names = [f"{2025 + ix} - Year {ix}" for ix in year_nums]
-year_names[0] = "Commisioning - 2025 - Year 0"
+year_nums = range(1,41)
+# year_names = [f"{2025 + ix} - Year {ix}" for ix in year_nums]
+# year_names[0] = "Commisioning - 2025 - Year 0"
 
 
 # ============================================================================ #
 # ! Calculations
-v = 10 # in reality, v is a ref to another sheet...
-quarterly_calc = lambda v: [f"={v}*4" for i in year_names]
-# quarterly_calc[0] = "={v}*2" july -> july so no need...
+# v = 10 # in reality, v is a ref to another sheet...
+# quarterly_calc = lambda v: [f"={v}*4" for i in year_names]
+# # quarterly_calc[0] = "={v}*2" july -> july so no need...
 
-monthly_calc = lambda v:[f"={v}*12" for i in year_names]
-# quarterly_calc[0] = "={v}*6"
+# monthly_calc = lambda v:[f"={v}*12" for i in year_names]
+# # quarterly_calc[0] = "={v}*6"
 
-annual_calc = lambda v:[f"={v}" for i in year_names]
+# annual_calc = lambda v:[f"={v}" for i in year_names]
 
-one_time_calc = lambda v:["=0" if i > 0 else f"={v}"  for i in year_nums]
-# one_time_calc[0] = f"={v}"
+# one_time_calc = lambda v:["=0" if i > 0 else f"={v}"  for i in year_nums]
+# # one_time_calc[0] = f"={v}"
 
-annual_calc_0_025 = lambda v:[f"={v}*1.025" for i in year_names] # each is supposed to ref the last... 
+# annual_calc_0_025 = lambda v:[f"={v}*1.025" for i in year_names] # each is supposed to ref the last... 
 
 # ============================================================================ #
 # ! Pre-Financial Close Costs 
