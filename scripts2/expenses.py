@@ -134,9 +134,20 @@ corp_df.loc[("Total", ""), :] = corp_df.sum(axis=0)
 
 # ============================================================================ #
 # ! Debt Service 
-ds2 = ds.copy()
+debt_service = ds.copy()
 col_names = make_year_col_names()
-ds2.insert(0, "newcol", [0]*4)
-ds2.insert(1, "newcol2", [0]*4)
-ds2 = ds2.set_axis(col_names[:23], axis=1, copy=True)
-ds2.drop("Year", axis=0, inplace=True)
+debt_service.insert(0, "newcol", [0]*4)
+debt_service.insert(1, "newcol2", [0]*4)
+debt_service = debt_service.set_axis(col_names[:23], axis=1, copy=True)
+debt_service.drop("Year", axis=0, inplace=True)
+
+# make length match
+empty = len(debt_service)*[0]
+empty_data = [empty for i in range(20)]
+empty_df = pd.DataFrame(empty_data, index=col_names[23:], columns=debt_service.index).T
+debt_service_df = pd.concat(objs=[debt_service, empty_df], axis=1)
+
+
+debt_service_df.loc["Total", :] = debt_service_df.sum(axis=0)
+
+

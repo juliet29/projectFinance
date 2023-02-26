@@ -1,6 +1,7 @@
 from collections import OrderedDict
 import pandas as pd
 from data import * 
+import numpy as np
 
 # ============================================================================ #
 # ! General Expenses 
@@ -41,5 +42,5 @@ corp_inputs = make_two_index_df(corporate_costs)
 
 # ============================================================================ #
 #  ! Debt 
-ds = pd.read_csv("debt_service.csv", skiprows=[0,1], names=["Year", "Interest Payment", "Prinicpal Payment", "Fees"])
+ds = pd.read_csv("debt_service.csv", skiprows=[0,1], names=["Year", "Interest Payment", "Prinicpal Payment", "Fees"], dtype=np.float64)
 ds = ds.T

@@ -48,7 +48,7 @@ pre_fc_costs = {
 
 # payments at financial close  
 fc_costs = {
-    "Land": 12.5e6,
+    "Land Acquisition": 12.5e6,
     "Development Expenses": 28.5e6,
     "Development Fees": 14.7e6,
     "Closing Costs" : 14.392e6,
