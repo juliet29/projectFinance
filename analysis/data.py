@@ -6,27 +6,15 @@ from icecream import ic
 # ! Timing
 
 months = range(1,25)
-
 year_nums = range(1,41)
-# year_names = [f"{2025 + ix} - Year {ix}" for ix in year_nums]
-# year_names[0] = "Commisioning - 2025 - Year 0"
+
+def make_year_col_names():
+        col_names = ["Financial Close - July 2023", "Construction Year 1 - July 2024", "Commisioning and Construction Year 2 - July 2025"]
+        year_names = [f"July {2025 + ix} - Year {ix}" for ix in year_nums]
+        col_names = col_names + year_names
 
 
-# ============================================================================ #
-# ! Calculations
-# v = 10 # in reality, v is a ref to another sheet...
-# quarterly_calc = lambda v: [f"={v}*4" for i in year_names]
-# # quarterly_calc[0] = "={v}*2" july -> july so no need...
-
-# monthly_calc = lambda v:[f"={v}*12" for i in year_names]
-# # quarterly_calc[0] = "={v}*6"
-
-# annual_calc = lambda v:[f"={v}" for i in year_names]
-
-# one_time_calc = lambda v:["=0" if i > 0 else f"={v}"  for i in year_nums]
-# # one_time_calc[0] = f"={v}"
-
-# annual_calc_0_025 = lambda v:[f"={v}*1.025" for i in year_names] # each is supposed to ref the last... 
+        return col_names
 
 # ============================================================================ #
 # ! Pre-Financial Close Costs 
@@ -146,8 +134,30 @@ corporate_costs = { # annually during construction and operations, escalate w/ a
 corporate_costs = OrderedDict(corporate_costs)
 
 
+# ============================================================================ # 
+# ! Escrow 
+# escrow at financial close
+hipu_escrow_fc = 7e6
+# escrow during operations 
+hipu_escrow_op = 22.5e6
+# annuel escrow decrease 
+annual_escrow_dec = 0.05
 
 
+# ============================================================================ #
+# ! Taxes
+corp_tax_rate = 0.3
+depreciation = "20 year straight line"
 
+
+# ============================================================================ #
+# ! Income Sources 
+target_avail = ([0.95] * 5) + ([1] * 4) + ([0.95] * 3) #TODO add to inputs 
+
+capacity = 660e6 # watts <- needs to multiplied by ratio, for now just the availability 
+pay = 10.52 # $/(1000 watts-month) -> base pay 
+ppa_inflat_rate = 1.05 # 0.5%
+
+loan_amount = 550062792 # $
 
 

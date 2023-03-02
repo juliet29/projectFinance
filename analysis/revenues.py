@@ -1,21 +1,10 @@
 import pandas as pd
 import numpy as np
 from data import * 
-from inputs import *
 from expenses import * 
 
 # ============================================================================ #
-# ! Inputs 
-
-target_avail = ([0.95] * 5) + ([1] * 4) + ([0.95] * 3) #TODO add to inputs 
-
-capacity = 660e6 # watts <- needs to multiplied by ratio, for now just the availability 
-pay = 10.52 # $/(1000 watts-month) -> base pay 
-ppa_inflat_rate = 1.05 # 0.5%
-
-loan_amount = 550062792 # $
-
-
+# ! Helper Functions 
 def monthly_possible_pay(capacity, pay=pay):
     capacity_chunks = capacity/1000
     total_possible_pay = pay*capacity_chunks
