@@ -5,10 +5,14 @@ from expenses import *
 from revenues import * 
 from profits import *
 
+"""
+Generate the report => From within the analysis folder, run  <python3 write.py>
+"""
+
 # ============================================================================ #
 # ! Setup 
 # Create a Pandas Excel writer using XlsxWriter as the engine.
-writer = pd.ExcelWriter('IslandEnergy.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter('sheets/IslandEnergy.xlsx', engine='xlsxwriter')
 workbook  = writer.book
 
 # ============================================================================ #
@@ -30,7 +34,7 @@ header_format = workbook.add_format({
     'text_wrap': True,
     'align': 'left',
     "font_name": "Calibri",
-    # 'border': 1
+    'border': 0
     })
 
 # ============================================================================ #
@@ -70,15 +74,38 @@ def write_one_of_many_df(df, sheet_name, title, sr):
 
     return end_row 
 
+# ~ TODO: Inputs 
 
-# ~ Single DF Per Page
-write_one_df(rev_df, "Revenues")
-write_one_df(summ_df, "Profits")
-
-
-# ~ Multi DF Per Page
+# ~ Expenses
 er = write_one_of_many_df(const_df, "Expenses", "Construction Phase Expenses", sr=7)
 
 er = write_one_of_many_df(op_df, "Expenses", "Outward Operating Expenses", sr=er+5)
 
 er = write_one_of_many_df(corp_df, "Expenses", "Coporate Operating Expenses", sr=er+5)
+
+
+# ~ Revenues, Profits 
+write_one_df(rev_df, "Revenues")
+write_one_df(summary_df, "Profits")
+
+
+
+
+
+# ============================================================================ #
+# ! General Sheet Formatting and Close
+# Page Headers 
+for name, sheet in workbook.sheetnames.items():
+    # add project name and sheet name on every sheet 
+    sheet.write('A1', 'Project Name', bold_format)
+    sheet.write('A2', 'Sheet Name', bold_format)
+    sheet.merge_range('B1:C1', "Island Energy", bold_format)
+    sheet.merge_range('B2:C2', name, bold_format)
+    
+    # Change column widths 
+    sheet.set_column("A:AR", 30)
+    # put money format in all columns that can recieve it 
+    sheet.set_column(1, 50, 25, money_format)
+
+
+writer.close()

@@ -28,16 +28,7 @@ const_exp = pd.DataFrame(const_costs, index=list(summ_df.columns), columns=["Con
 
 summary_df = pd.concat(objs=[const_exp, summ_df])
 
-# ~ HIPU Escrow 
-hipu_escrow = [0]* len(year_nums)
-hipu_escrow[0] = hipu_escrow_op
-
-
-for i in year_nums[0:-1]:
-    hipu_escrow[i] = hipu_escrow[i-1]*(1-annual_escrow_dec)
-
-hipu_escrow_full = [hipu_escrow_fc, hipu_escrow_fc, hipu_escrow_fc] + hipu_escrow
-
+# ~ Hipu Escrow
 summary_df.loc["HIPU Escrow*"] = hipu_escrow_full
 
 # ~ Summary total expenses

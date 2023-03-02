@@ -1,6 +1,5 @@
 from collections import OrderedDict
-from xlsxwriter.utility import xl_rowcol_to_cell, xl_cell_to_rowcol
-from icecream import ic
+from enum import Enum
 
 # ============================================================================ #
 # ! Timing
@@ -12,7 +11,6 @@ def make_year_col_names():
         col_names = ["Financial Close - July 2023", "Construction Year 1 - July 2024", "Commisioning and Construction Year 2 - July 2025"]
         year_names = [f"July {2025 + ix} - Year {ix}" for ix in year_nums]
         col_names = col_names + year_names
-
 
         return col_names
 
@@ -136,12 +134,22 @@ corporate_costs = OrderedDict(corporate_costs)
 
 # ============================================================================ # 
 # ! Escrow 
+
+class Escrow(Enum):
+    FC = 7e6
+    OP = 22.5e6
+    ANNUAL_DECREASE = 0.05
+
+# Escrow.ANNUAL_DECREASE.value
+
 # escrow at financial close
 hipu_escrow_fc = 7e6
 # escrow during operations 
 hipu_escrow_op = 22.5e6
 # annuel escrow decrease 
 annual_escrow_dec = 0.05
+
+
 
 
 # ============================================================================ #

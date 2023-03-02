@@ -164,7 +164,7 @@ corp_df.loc[("Total", ""), :] = corp_df.sum(axis=0)
 # ============================================================================ #
 # ! Debt Service 
 # ~ read in data 
-ds = pd.read_csv("_debt_service.csv", skiprows=[0,1], names=["Year", "Interest Payment", "Prinicpal Payment", "Fees"], dtype=np.float64)
+ds = pd.read_csv("debt_service.csv", skiprows=[0,1], names=["Year", "Interest Payment", "Prinicpal Payment", "Fees"], dtype=np.float64)
 ds = ds.T
 
 # ~ make format fit 
@@ -184,4 +184,18 @@ debt_service_df = pd.concat(objs=[debt_service, empty_df], axis=1)
 
 debt_service_df.loc["Total", :] = debt_service_df.sum(axis=0)
 
+
+# ~ HIPU Escrow 
+hipu_escrow = [0]* len(year_nums)
+hipu_escrow[0] = hipu_escrow_op
+
+
+for i in year_nums[0:-1]:
+    hipu_escrow[i] = hipu_escrow[i-1]*(1-annual_escrow_dec)
+
+hipu_escrow2 = [-(hipu_escrow[0] - i) for i in hipu_escrow[1:]]
+true_op_hipu_escrow = [hipu_escrow[0]] + hipu_escrow2
+true_op_hipu_escrow
+
+hipu_escrow_full = [hipu_escrow_fc, 0, 0] + true_op_hipu_escrow
 
