@@ -3,6 +3,10 @@ import numpy as np
 from data import * 
 
 
+"""Calculation of Expenses over Time based on Inputs 
+outputs: const_exp, op_exp, corp_exp"""
+
+
 # ============================================================================ #
 # ! helper functions 
 
@@ -113,13 +117,13 @@ year_2 = const_df.iloc[const_df.index.get_level_values(0)=="Total", 14:].sum(axi
 
 by_fc = const_df.iloc[const_df.index.get_level_values(0)=="Total", 0:2].sum(axis=1).values[0]
 
-const_costs = len(summ_df.columns)*[0]
+const_costs = len(year_col_names)*[0]
 const_costs[0] = by_fc
 const_costs[1] = year_1
 const_costs[2] = year_2
-const_exp = pd.DataFrame(const_costs, index=list(summ_df.columns), columns=["Construction Expenses"]).T
+const_exp_df = pd.DataFrame(const_costs, index=list(year_col_names), columns=["Construction Expenses"]).T
 
-# export const_exp 
+const_exp = const_exp_df.loc["Construction Expenses"]
 
 # ============================================================================ # 
 # ! operations phase
@@ -178,44 +182,16 @@ corp_df.loc[("Total", ""), :] = corp_df.sum(axis=0)
 corp_exp = corp_df.loc[("Total", "")]
 
 
-# ============================================================================ #
-# ! Debt Service 
-# ~ read in data 
-ds = pd.read_csv("debt_service.csv", skiprows=[0,1], names=["Year", "Interest Payment", "Prinicpal Payment", "Fees"], dtype=np.float64)
-ds = ds.T
+# ============================================================================ # 
+# ! Summary of Expenses 
 
-# ~ make format fit 
-debt_service = ds.copy()
-col_names = make_year_col_names()
-debt_service.insert(0, "newcol", [0]*4)
-debt_service.insert(1, "newcol2", [0]*4)
-debt_service = debt_service.set_axis(col_names[:23], axis=1, copy=True)
-debt_service.drop("Year", axis=0, inplace=True)
-
-# make length match other expense dataframes 
-empty = len(debt_service)*[0]
-empty_data = [empty for i in range(20)]
-empty_df = pd.DataFrame(empty_data, index=col_names[23:], columns=debt_service.index).T
-debt_service_df = pd.concat(objs=[debt_service, empty_df], axis=1)
+exp_df = pd.concat([const_exp, op_exp, corp_exp], axis=1).T
+exp_df = exp_df.set_axis(["Construction", "Operating", "Corporate"], copy=True)
+exp_df.loc["Total", :] = exp_df.sum(axis=0)
 
 
 # debt_service_df.loc["Total", :] = debt_service_df.sum(axis=0)
 
 # debt_service_exp = debt_service_df.loc["Total"]
 
-# ============================================================================ #
-
-# ~ HIPU Escrow 
-hipu_escrow = [0]* len(year_nums)
-hipu_escrow[0] = hipu_escrow_op
-
-
-for i in year_nums[0:-1]:
-    hipu_escrow[i] = hipu_escrow[i-1]*(1-annual_escrow_dec)
-
-hipu_escrow2 = [-(hipu_escrow[0] - i) for i in hipu_escrow[1:]]
-true_op_hipu_escrow = [hipu_escrow[0]] + hipu_escrow2
-true_op_hipu_escrow
-
-hipu_escrow_full = [hipu_escrow_fc, 0, 0] + true_op_hipu_escrow
 

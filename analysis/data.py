@@ -13,13 +13,9 @@ def make_year_col_names():
         col_names = col_names + year_names
 
         return col_names
-
+year_col_names = make_year_col_names()
 # ============================================================================ #
 # ! Pre-Financial Close Costs 
-
-# TODO
-# permit for fed weetland construction 3M
-# state enviro fee for monitoring during const, 800k at 
 
 pre_fc_costs = {
     "Wetland Construction Permit": 3e6,
@@ -155,7 +151,11 @@ annual_escrow_dec = 0.05
 # ============================================================================ #
 # ! Taxes
 corp_tax_rate = 0.3
-depreciation = "20 year straight line"
+
+straight_line_dep_term = 20
+property_tax_rate = 0.01 
+property_value = 1/(property_tax_rate) * corporate_costs["Other Annual Costs"]["Property Taxes"]
+init_capx = epc_data["EPC Cost"]
 
 
 # ============================================================================ #

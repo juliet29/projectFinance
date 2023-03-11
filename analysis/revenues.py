@@ -27,26 +27,29 @@ for pay in inflat_pay:
     ppa_forecast.append([monthly_possible_pay(i*capacity,pay) for i in target_avail])
 
 
-col_names = make_year_col_names()
+col_names = year_col_names
 months_in_year = pd.date_range('2025-01-01','2025-12-31', 
               freq='MS').strftime("%b").tolist()
 
 
 ppa_df = pd.DataFrame(ppa_forecast, columns=months_in_year, index=col_names[3:]).T
 
-
-# ============================================================================ #
-# ! Loan 
-# add on to previous data frame 
-empty = [0]*len(ppa_df)
-fc = empty.copy()
-fc[6] = loan_amount
-loan_df = pd.DataFrame([fc, empty, empty], index=col_names[:3], columns=months_in_year).T
+ppa_df.loc["Total", :] = ppa_df.sum(axis=0)
 
 
-# ============================================================================ #
-# ! Join Loan and PPA Revenue 
-rev_df = pd.concat(objs=[loan_df, ppa_df], axis=1)
-rev_df.loc["Total", :] = rev_df.sum(axis=0)
+
+# # ============================================================================ #
+# # ! Loan 
+# # add on to previous data frame 
+# empty = [0]*len(ppa_df)
+# fc = empty.copy()
+# fc[6] = loan_amount
+# loan_df = pd.DataFrame([fc, empty, empty], index=col_names[:3], columns=months_in_year).T
+
+
+# # ============================================================================ #
+# # ! Join Loan and PPA Revenue 
+# rev_df = pd.concat(objs=[loan_df, ppa_df], axis=1)
+# rev_df.loc["Total", :] = rev_df.sum(axis=0)
 
 
