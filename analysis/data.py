@@ -160,12 +160,13 @@ init_capx = epc_data["EPC Cost"]
 
 # ============================================================================ #
 # ! Income Sources 
+# ~ PPA
 target_avail = ([0.95] * 5) + ([1] * 4) + ([0.95] * 3) #TODO add to inputs 
-
 capacity = 660e6 # watts <- needs to multiplied by ratio, for now just the availability 
 pay = 10.52 # $/(1000 watts-month) -> base pay 
 ppa_inflat_rate = 1.05 # 0.5%
 
+# ~ Loan
 loan_amount = 550062792 # $
 
 
