@@ -26,6 +26,9 @@ empty_data = [empty for i in range(20)]
 empty_df = pd.DataFrame(empty_data, index=col_names[23:], columns=debt_service.index).T
 debt_service_df = pd.concat(objs=[debt_service, empty_df], axis=1)
 
+# # tax deductible debt service payments 
+# taxable_debt_payments = debt_service_df.loc["Interest Payment"] + debt_service_df.loc["Fees"]
+# taxable_debt_payments
 
 # ============================================================================ #
 # ~ HIPU Escrow 
@@ -47,29 +50,14 @@ hipu_escrow_full = [hipu_escrow_fc, 0, 0] + true_op_hipu_escrow
 
 
 # # ============================================================================ #
-# # ! Expenses
-# summ_df = pd.DataFrame([corp_exp, op_exp, debt_service_exp, ], index=["Corporate Expenses", "Operations Expenses", "Debt Service"])
+# # ! Depreciation 
+# depreciation on assets and capx 
+substation_value = 100*corporate_costs["Other Annual Costs"]["Property Taxes"][0]
+capx = epc_data["EPC Cost"]
 
-# summary_df = pd.concat(objs=[const_exp, summ_df])
-
-# # ~ Hipu Escrow
-# summary_df.loc["HIPU Escrow*"] = hipu_escrow_full
-
-# # ~ Summary total expenses
-# summary_df.loc["Total Expenses"] = summary_df.sum(axis=0)
-
-# # ============================================================================ #
-# # ! Income
-
-# summary_df.loc["Revenues"] = rev_df.loc["Total"].T # TODO expenses should be negative! 
-
-# summary_df.loc["Net Income"] = summary_df.loc["Revenues"] - summary_df.loc["Total Expenses"]
+depreciable_assets = property_value + init_capx
+annual_dep = depreciable_assets/straight_line_dep_term
+term_dep = [annual_dep]*20
 
 
-# # ============================================================================ #
-# # ! Taxes
-# summary_df.loc["Corporate Tax Payable"] = summary_df.loc["Net Income"]*corp_tax_rate
-
-# summary_df.iloc[-1, 0:4] = 0
-
-# summary_df.loc["After Tax Income"] = summary_df.loc["Net Income"] - summary_df.loc["Corporate Tax Payable"]
+dep_df = pd.DataFrame([term_dep], columns=year_col_names[0:20], index=["Depreciation"])
