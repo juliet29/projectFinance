@@ -52,7 +52,7 @@ def make_two_index_df(d_orig):
 
 
 # ============================================================================ #
-# ! construction phase
+# ! Construction Phase
 
 # ~ prep data ----------
 d = {
@@ -63,8 +63,6 @@ d = {
 }
 const_phase_inputs = make_two_index_df(d)
 const_df, const_inputs = prep_for_calcs(const_phase_inputs)
-
-
 
 # ~ pre- financial close 
 const_df.loc["Pre-Financial Close Expenses", "Pre-Financial Close"] = const_inputs.loc["Pre-Financial Close Expenses"]["Value"].values
@@ -84,10 +82,10 @@ a = const_df.loc["Construction Period Even Split Monthly Expenses"].apply(lambda
 for i in const_df.loc["Construction Period Even Split Monthly Expenses"].index:
     const_df.loc[("Construction Period Even Split Monthly Expenses", i)] = a.loc[i]
 
-# correction because payments are only during the construction period 
+# correction because payments are only during the construction period, not before financial close  
 const_df.loc["Construction Period Even Split Monthly Expenses", ["Pre-Financial Close", "Financial Close - July 2023"]] = 0
 
-# ~ EPC expenses 
+# ~ EPC expenses based on EPC payments 
 for ix, col in enumerate(const_df.columns):
     # simplify code with these variables 
     ix1 = "Construction Period Custom Schedule Monthly Expenses"
@@ -106,6 +104,22 @@ for ix, col in enumerate(const_df.columns):
 # calculate total per time period 
 const_df.loc[("Total", ""), :] = const_df.sum(axis=0)
 
+
+# ~ Collapse construction costs into final reporting periods 
+# TODO make these bi-annual 
+year_1 = const_df.iloc[const_df.index.get_level_values(0)=="Total", 2:14].sum(axis=1).values[0]
+
+year_2 = const_df.iloc[const_df.index.get_level_values(0)=="Total", 14:].sum(axis=1).values[0]
+
+by_fc = const_df.iloc[const_df.index.get_level_values(0)=="Total", 0:2].sum(axis=1).values[0]
+
+const_costs = len(summ_df.columns)*[0]
+const_costs[0] = by_fc
+const_costs[1] = year_1
+const_costs[2] = year_2
+const_exp = pd.DataFrame(const_costs, index=list(summ_df.columns), columns=["Construction Expenses"]).T
+
+# export const_exp 
 
 # ============================================================================ # 
 # ! operations phase
@@ -140,9 +154,10 @@ op_df.drop("Monthly HIPU Interconection Fee, Post-Decade 1", level=1, inplace=Tr
 # calculate total per time period 
 op_df.loc[("Total", ""), :] = op_df.sum(axis=0)
 
-
+# export op_exp 
+op_exp = op_df.loc[("Total", "")]
 # ============================================================================ # 
-# ! corporate expenses 
+# ! Corporate Expenses 
 # ~ prep data 
 corp_inputs = make_two_index_df(corporate_costs)
 corp_df, corp_ref = prep_for_calcs(corp_inputs, yearly=True)
@@ -159,6 +174,8 @@ for col in corp_df.columns[2:]:
 # calculate total per time period 
 corp_df.loc[("Total", ""), :] = corp_df.sum(axis=0)
 
+# export corp_exp 
+corp_exp = corp_df.loc[("Total", "")]
 
 
 # ============================================================================ #
@@ -182,8 +199,11 @@ empty_df = pd.DataFrame(empty_data, index=col_names[23:], columns=debt_service.i
 debt_service_df = pd.concat(objs=[debt_service, empty_df], axis=1)
 
 
-debt_service_df.loc["Total", :] = debt_service_df.sum(axis=0)
+# debt_service_df.loc["Total", :] = debt_service_df.sum(axis=0)
 
+# debt_service_exp = debt_service_df.loc["Total"]
+
+# ============================================================================ #
 
 # ~ HIPU Escrow 
 hipu_escrow = [0]* len(year_nums)
