@@ -1,39 +1,42 @@
 import pandas as pd
 import numpy as np
-from data import * 
-from expenses import * 
 
-# ============================================================================ #
-# ! Helper Functions 
-def monthly_possible_pay(capacity, pay=pay):
-    capacity_chunks = capacity/1000
-    total_possible_pay = pay*capacity_chunks
-    return total_possible_pay #  $/month...
+class RevenuesMixin:
+    # ! Helper Functions 
+    def monthly_possible_pay(self, capacity, pay=None):
+        if pay == None:
+            pay = self.pay # TODO check this out!
 
-# ============================================================================ #
-# ! PPA
-
-# inflation adjusted pay 
-inflat_pay = [0]* len(year_nums)
-inflat_pay[0] = pay
+        capacity_chunks = capacity/1000
+        self.total_possible_pay = pay*capacity_chunks
+        return self.total_possible_pay #  $/month...
 
 
-for i in year_nums[0:-1]:
-    inflat_pay[i] = inflat_pay[i-1]*ppa_inflat_rate
-
-# project ppa 
-ppa_forecast = []
-for pay in inflat_pay:
-    ppa_forecast.append([monthly_possible_pay(i*capacity,pay) for i in target_avail])
+    # ! PPA
+    def calc_ppa(self):
+        # inflation adjusted pay 
+        inflat_pay = [0]* len(self.year_nums)
+        inflat_pay[0] = self.pay
 
 
-col_names = year_col_names
-months_in_year = pd.date_range('2025-01-01','2025-12-31', 
-              freq='MS').strftime("%b").tolist()
+        for i in self.year_nums[0:-1]:
+            inflat_pay[i] = inflat_pay[i-1]*self.ppa_inflat_rate
+
+        # project ppa 
+        ppa_forecast = []
+        for pay in inflat_pay:
+            ppa_forecast.append([self.monthly_possible_pay(i*self.capacity,pay) for i in self.target_avail])
 
 
-ppa_df = pd.DataFrame(ppa_forecast, columns=months_in_year, index=col_names[3:]).T
+        col_names = self.year_col_names
+        months_in_year = pd.date_range('2025-01-01','2025-12-31', 
+                    freq='MS').strftime("%b").tolist()
 
-ppa_df.loc["Total", :] = ppa_df.sum(axis=0)
+
+        self.ppa_df = pd.DataFrame(ppa_forecast, columns=months_in_year, index=col_names[3:]).T
+
+        self.ppa_df.loc["Total", :] = self.ppa_df.sum(axis=0)
+
+        return self.ppa_df
 
 
