@@ -37,19 +37,3 @@ ppa_df = pd.DataFrame(ppa_forecast, columns=months_in_year, index=col_names[3:])
 ppa_df.loc["Total", :] = ppa_df.sum(axis=0)
 
 
-
-# # ============================================================================ #
-# # ! Loan 
-# # add on to previous data frame 
-# empty = [0]*len(ppa_df)
-# fc = empty.copy()
-# fc[6] = loan_amount
-# loan_df = pd.DataFrame([fc, empty, empty], index=col_names[:3], columns=months_in_year).T
-
-
-# # ============================================================================ #
-# # ! Join Loan and PPA Revenue 
-# rev_df = pd.concat(objs=[loan_df, ppa_df], axis=1)
-# rev_df.loc["Total", :] = rev_df.sum(axis=0)
-
-

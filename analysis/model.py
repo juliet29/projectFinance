@@ -35,7 +35,6 @@ def run_model(ppa_df, exp_df, debt_service_df, dep_df, loan_amount=loan_amount, 
     # ebitda 
     df0.loc["EBITDA"] = df0.loc["Revenue"] + df0.loc["Total Expenses"]
 
-
     # tax depreciation 
     df0.loc["Depreciation Value"] = dep_df.loc["Depreciation"]*-1
     df0 = df0.fillna(0)
@@ -62,7 +61,9 @@ def run_model(ppa_df, exp_df, debt_service_df, dep_df, loan_amount=loan_amount, 
 
     df0.loc["Cumulative Cash Flow"] = df0.loc["Cash Flow"].cumsum()
 
-    roe = df0.loc["Cash Flow"].sum()/df0.loc["Equity Income"][0]
+    print(df0.loc["Cash Flow"][0:23])
+
+    roe = df0.loc["Cash Flow"][0:23].sum()/df0.loc["Equity Income"][0]
 
     npv = npf.npv(rate=0.08, values=df0.loc["Cash Flow"])/1e6
 
