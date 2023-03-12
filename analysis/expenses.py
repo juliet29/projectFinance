@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from data import * 
+from icecream import ic
 
 
 """Calculation of Expenses over Time based on Inputs 
@@ -79,7 +80,9 @@ const_df.loc["Financial Close Expenses", "Financial Close - July 2023"] = const_
 # get values from input dataframe
 vals = const_inputs.loc["Construction Period Even Split Monthly Expenses"]["Value"].values
 
+
 # perform calculatuation, expense is split evenly over months of the year 
+
 a = const_df.loc["Construction Period Even Split Monthly Expenses"].apply(lambda x: vals/12)
 
 # assign values to dataframe 
@@ -89,42 +92,52 @@ for i in const_df.loc["Construction Period Even Split Monthly Expenses"].index:
 # correction because payments are only during the construction period, not before financial close  
 const_df.loc["Construction Period Even Split Monthly Expenses", ["Pre-Financial Close", "Financial Close - July 2023"]] = 0
 
-# ~ EPC expenses based on EPC payments 
-for ix, col in enumerate(const_df.columns):
-    # simplify code with these variables 
-    ix1 = "Construction Period Custom Schedule Monthly Expenses"
-    ix2 = "EPC Cost"
-    # get the value of EPC from input dataframe 
-    val = const_inputs.loc[(ix1, ix2), "Value"]
+def calc_epc_expenses(const_df, const_inputs, new_val=None):
+    # ~ EPC expenses based on EPC payments 
+    for ix, col in enumerate(const_df.columns):
+        # simplify code with these variables 
+        ix1 = "Construction Period Custom Schedule Monthly Expenses"
+        ix2 = "EPC Cost"
+        # get the value of EPC from input dataframe 
+        if not new_val:
+            val = const_inputs.loc[(ix1, ix2), "Value"]
+        else:
+            val = new_val
 
-    # initial entries are 0, payments only occur during the construction period 
-    offset = 1
-    if ix <= offset:
-        const_df.loc[(ix1, ix2), col]  = 0
-    else:
-        # reference the payment schedule 
-        const_df.loc[(ix1, ix2), col]  = epc_sched[ix -1] * val
+        # initial entries are 0, payments only occur during the construction period 
+        offset = 1
+        if ix <= offset:
+            const_df.loc[(ix1, ix2), col]  = 0
+        else:
+            # reference the payment schedule 
+            const_df.loc[(ix1, ix2), col]  = epc_sched[ix -1] * val
 
-# calculate total per time period 
-const_df.loc[("Total", ""), :] = const_df.sum(axis=0)
+    # calculate total per time period 
+    const_df.loc[("Total", ""), :] = const_df.sum(axis=0)
 
+    return const_df
 
-# ~ Collapse construction costs into final reporting periods 
-# TODO make these bi-annual 
-year_1 = const_df.iloc[const_df.index.get_level_values(0)=="Total", 2:14].sum(axis=1).values[0]
+def make_const_exp(const_df):
+    # ~ Collapse construction costs into final reporting periods 
+    # TODO make these bi-annual 
+    year_1 = const_df.iloc[const_df.index.get_level_values(0)=="Total", 2:14].sum(axis=1).values[0]
 
-year_2 = const_df.iloc[const_df.index.get_level_values(0)=="Total", 14:].sum(axis=1).values[0]
+    year_2 = const_df.iloc[const_df.index.get_level_values(0)=="Total", 14:].sum(axis=1).values[0]
 
-by_fc = const_df.iloc[const_df.index.get_level_values(0)=="Total", 0:2].sum(axis=1).values[0]
+    by_fc = const_df.iloc[const_df.index.get_level_values(0)=="Total", 0:2].sum(axis=1).values[0]
 
-const_costs = len(year_col_names)*[0]
-const_costs[0] = by_fc
-const_costs[1] = year_1
-const_costs[2] = year_2
-const_exp_df = pd.DataFrame(const_costs, index=list(year_col_names), columns=["Construction Expenses"]).T
+    const_costs = len(year_col_names)*[0]
+    const_costs[0] = by_fc
+    const_costs[1] = year_1
+    const_costs[2] = year_2
+    const_exp_df = pd.DataFrame(const_costs, index=list(year_col_names), columns=["Construction Expenses"]).T
 
-const_exp = const_exp_df.loc["Construction Expenses"]
+    const_exp = const_exp_df.loc["Construction Expenses"]
 
+    return const_exp
+
+const_df_base = calc_epc_expenses(const_df, const_inputs, new_val=None)
+const_exp = make_const_exp(const_df_base)
 # ============================================================================ # 
 # ! operations phase
 
@@ -189,6 +202,14 @@ exp_df = pd.concat([const_exp, op_exp, corp_exp], axis=1).T
 exp_df = exp_df.set_axis(["Construction", "Operating", "Corporate"], copy=True)
 exp_df.loc["Total", :] = exp_df.sum(axis=0)
 
+def calc_exp_df(const_exp, op_exp, corp_exp):
+    exp_df = pd.concat([const_exp, op_exp, corp_exp], axis=1).T
+    exp_df = exp_df.set_axis(["Construction", "Operating", "Corporate"], copy=True)
+    exp_df.loc["Total", :] = exp_df.sum(axis=0)
+
+    return exp_df
+
+exp_df = calc_exp_df(const_exp, op_exp, corp_exp)
 
 # debt_service_df.loc["Total", :] = debt_service_df.sum(axis=0)
 
