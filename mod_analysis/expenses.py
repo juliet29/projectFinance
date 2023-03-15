@@ -82,10 +82,9 @@ class ExpensesMixin:
         # get values from input dataframe
         vals = const_inputs.loc["Construction Period Even Split Monthly Expenses"]["Value"].values
 
-
         # perform calculatuation, expense is split evenly over months of the year 
 
-        a = const_df.loc["Construction Period Even Split Monthly Expenses"].apply(lambda x: vals/12)
+        a = const_df.loc["Construction Period Even Split Monthly Expenses"].apply(lambda x: vals/24)
 
         # assign values to dataframe 
         for i in const_df.loc["Construction Period Even Split Monthly Expenses"].index:
@@ -166,8 +165,8 @@ class ExpensesMixin:
         # ~ quarterly payments to MaintCo 
         op_df.iloc[op_df.index.get_level_values(1)=="Quarterly MaintCo Maintennance Fee", 3:] = op_ref.loc[("Operating Fees to External Entities", "Quarterly MaintCo Maintennance Fee"),"Value"]*4
 
-        # ~ annual fishery payments 
-        op_df.iloc[op_df.index.get_level_values(1)=="Annual Fisheries Mitigation Permit", 3:] = op_ref.loc[("Operating Fees to External Entities", "Annual Fisheries Mitigation Permit"),"Value"]
+        # # ~ annual fishery payments 
+        # op_df.iloc[op_df.index.get_level_values(1)=="Annual Fisheries Mitigation Permit", 3:] = op_ref.loc[("Operating Fees to External Entities", "Annual Fisheries Mitigation Permit"),"Value"]
 
         # ~ -- variable monthly interconnection fee 
         # decade one 

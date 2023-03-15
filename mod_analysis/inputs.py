@@ -20,8 +20,11 @@ class InputsMixin:
     def define_const_costs(self):
         self.pre_fc_costs = {
             "Wetland Construction Permit": 3e6,
-            "State Environmental Monitoring Fee": 800e3
+            "State Environmental Monitoring Fee": 800e3,
+             "Annual Fisheries Mitigation Permit": 130e3*2,
         }
+
+
 
         # payments at financial close  
         self.fc_costs = {
@@ -36,7 +39,8 @@ class InputsMixin:
         self.monthly_split_costs = {
         "Interest and Fees" : 56.853e6,
         "Insurance and Fees" : 25e6,
-        "Management and Oversight ": 8.15e6
+        "Management and Oversight ": 8.15e6,
+       
         }
 
         # eng, procurement, const base cost 
@@ -67,14 +71,15 @@ class InputsMixin:
         comm_fees = { # one time 
                 "ABSCO Interconnection Fee": 2.5e6,
                 "ABSCO Network Upgrades": 5.2e6,
-                "HIPU Interconnection Fee": 2e6
+                "HIPU Interconnection Fee": 2e6,
+                
             }
         self.comm_fees = OrderedDict(comm_fees)
 
 
         other_fees = {
             "Quarterly MaintCo Maintennance Fee": 690e3, # quarterly during operations 
-            "Annual Fisheries Mitigation Permit": 130e3, # annual (during operations?) # TODO they say only during construction...
+             # annual (during operations?) # TODO they say only during construction...
             "Monthly HIPU Interconection Fee, Decade 1": 110e3,  # monthly during oper.
             "Monthly HIPU Interconection Fee, Post-Decade 1": 220e3,  # monthly during oper
         }
