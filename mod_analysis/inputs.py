@@ -79,7 +79,8 @@ class InputsMixin:
 
         other_fees = {
             "Quarterly MaintCo Maintennance Fee": 690e3, # quarterly during operations 
-             # annual (during operations?) # TODO they say only during construction...
+            # "Annual Fisheries Mitigation Permit": 130e3,
+            # annual (during operations?) # TODO they say only during construction...
             "Monthly HIPU Interconection Fee, Decade 1": 110e3,  # monthly during oper.
             "Monthly HIPU Interconection Fee, Post-Decade 1": 220e3,  # monthly during oper
         }
